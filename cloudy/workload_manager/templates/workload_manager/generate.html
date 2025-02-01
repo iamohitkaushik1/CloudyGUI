@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title mb-4">
+                        <i class="fas fa-tasks"></i> Workload Generator
+                    </h1>
+                    <p class="lead">Generate and analyze cloud workloads with customizable parameters.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if stats %}
+    <div class="row mb-4">
+        <!-- Resource Statistics -->
+        <div class="col-md-4">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-microchip"></i> CPU Usage</h5>
+                    <h2 class="display-4">{{ stats.total_cpu }}</h2>
+                    <p class="mb-0">Total CPU Cores</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-memory"></i> Memory Usage</h5>
+                    <h2 class="display-4">{{ stats.total_memory }}</h2>
+                    <p class="mb-0">Total Memory (GB)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-desktop"></i> GPU Usage</h5>
+                    <h2 class="display-4">{{ stats.total_gpu }}</h2>
+                    <p class="mb-0">Total GPU Units</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Job Type Distribution</h5>
+                    <canvas id="jobTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Active Jobs Over Time</h5>
+                    <canvas id="jobsTimelineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">CPU Usage Over Time</h5>
+                    <canvas id="cpuTimelineChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Memory Usage Over Time</h5>
+                    <canvas id="memoryTimelineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">GPU Usage Over Time</h5>
+                    <canvas id="gpuTimelineChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Disk Usage Over Time</h5>
+                    <canvas id="diskTimelineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Charts -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Resource Distribution</h5>
+                    <canvas id="resourceChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Generated Workload</h5>
+                    <p>Your workload has been generated successfully! You can download the CSV file below.</p>
+                    <a href="{% url 'workload_manager:download' %}" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Download Workload CSV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Generate New Workload</h5>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary mt-3">
+                            <i class="fas fa-play"></i> Generate Workload
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if stats %}
+<script>
+    {% if timeline_json %}
+    const timelineData = {{ timeline_json|safe }};
+    
+    // Prepare data for line charts
+    const times = timelineData.map(d => d.time);
+    const cpuData = timelineData.map(d => d.cpu);
+    const memoryData = timelineData.map(d => d.memory / 1024); // Convert to GB
+    const gpuData = timelineData.map(d => d.gpu);
+    const diskData = timelineData.map(d => d.disk);
+    const activeJobsData = timelineData.map(d => d.active_jobs);
+
+    // Line chart configuration
+    const lineChartConfig = (data, label, color) => ({
+        type: 'line',
+        data: {
+            labels: times,
+            datasets: [{
+                label: label,
+                data: data,
+                borderColor: color,
+                tension: 0.1,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                },
+                y: {
+                    display: true,
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Create line charts
+    new Chart(document.getElementById('jobsTimelineChart').getContext('2d'),
+        lineChartConfig(activeJobsData, 'Active Jobs', '#2ecc71'));
+    
+    new Chart(document.getElementById('cpuTimelineChart').getContext('2d'),
+        lineChartConfig(cpuData, 'CPU Cores', '#3498db'));
+    
+    new Chart(document.getElementById('memoryTimelineChart').getContext('2d'),
+        lineChartConfig(memoryData, 'Memory (GB)', '#9b59b6'));
+    
+    new Chart(document.getElementById('gpuTimelineChart').getContext('2d'),
+        lineChartConfig(gpuData, 'GPU Units', '#e74c3c'));
+    
+    new Chart(document.getElementById('diskTimelineChart').getContext('2d'),
+        lineChartConfig(diskData, 'Disk (GB)', '#f1c40f'));
+    {% endif %}
+
+    // Job Type Distribution Chart
+    const jobTypeCtx = document.getElementById('jobTypeChart').getContext('2d');
+    const jobTypeData = {{ job_type_json|safe }};
+    new Chart(jobTypeCtx, {
+        type: 'pie',
+        data: {
+            labels: jobTypeData.labels,
+            datasets: [{
+                data: jobTypeData.values,
+                backgroundColor: [
+                    '#2ecc71',
+                    '#3498db',
+                    '#9b59b6',
+                    '#e74c3c'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    // Resource Distribution Chart
+    const resourceCtx = document.getElementById('resourceChart').getContext('2d');
+    new Chart(resourceCtx, {
+        type: 'bar',
+        data: {
+            labels: ['CPU', 'Memory (GB)', 'GPU'],
+            datasets: [{
+                label: 'Resource Usage',
+                data: [
+                    {{ stats.total_cpu }},
+                    {{ stats.total_memory }},
+                    {{ stats.total_gpu }}
+                ],
+                backgroundColor: [
+                    '#3498db',
+                    '#2ecc71',
+                    '#e74c3c'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}
