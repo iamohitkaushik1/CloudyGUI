@@ -79,7 +79,11 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
-5. Start the development server:
+## Running the Django Server
+
+To run the Django development server, simply double-click the `run_server.bat` file located in the project directory. This will navigate to the project directory and start the server.
+
+Alternatively, you can start the server manually by running the following command:
 ```bash
 python manage.py runserver
 ```
