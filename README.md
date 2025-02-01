@@ -32,27 +32,138 @@ The core functionality is based on [Cloudy](https://github.com/ahmad-siavashi/cl
 - **Failure Simulation**: Random interruption simulation for realistic workload testing
 - **Output Analysis**: CSV output generation for detailed workload analysis
 
+## Workload Generator
+
+CloudyGUI includes a powerful workload generator that simulates realistic workloads for cloud computing environments. The generator creates dynamic resource utilization patterns and provides detailed visualizations of resource usage over time.
+
+### Virtual Machine Specifications
+- CPU: 512 cores
+  - Supports parallel processing
+  - Dynamic allocation based on job requirements
+  - Configurable core limits per job type
+  
+- Memory: 2TB RAM
+  - High-bandwidth memory access
+  - Scalable allocation from 4GB to 512GB per job
+  - Memory usage patterns based on job type
+  
+- GPU: 32 units
+  - Dedicated GPU resources for ML workloads
+  - Fractional GPU allocation supported
+  - GPU sharing between compatible jobs
+  
+- Storage: 10TB disk space
+  - High-speed SSD storage
+  - Dynamic I/O patterns
+  - Configurable per-job storage limits
+
+### Resource Allocation Strategy
+- Dynamic resource scaling based on job requirements
+- Automatic resource adjustment based on job progress
+- Resource usage patterns specific to job types
+- Built-in resource limits to prevent overallocation
+
+### Time Window Management
+
+The workload generator uses a sophisticated 7-day time window system for job distribution and resource tracking:
+
+### Time Window Configuration
+- Window Size: 7 days (configurable)
+- Base Time: Current time minus 7 days
+- Resolution: 5-minute intervals for resource tracking
+
+### Job Timing Distribution
+1. **Submit Time**
+   - Distributed across the 7-day window
+   - Random distribution with weighted recent hours
+   - Ensures realistic job arrival patterns
+
+2. **Start Time**
+   - For running jobs: Between submit time and current time
+   - For completed jobs: Between submit time and end time
+   - For failed jobs: Limited duration based on failure point
+
+3. **End Time**
+   - Terminated jobs: Full planned duration
+   - Failed jobs: Partial duration (up to 50% of planned)
+   - Running jobs: Calculated based on task type
+   - Interrupted jobs: Random duration up to max
+
+### Status-based Timing
+- **Waiting Jobs (20%)**
+  - No start/end time set
+  - Resources reserved but not allocated
+  
+- **Running Jobs (30%)**
+  - Start time set
+  - End time calculated based on progress
+  - Dynamic resource usage
+  
+- **Terminated Jobs (35%)**
+  - Complete start/end time window
+  - Full resource usage history
+  
+- **Failed Jobs (10%)**
+  - Partial duration
+  - Resource usage until failure point
+  
+- **Interrupted Jobs (5%)**
+  - Random duration up to maximum
+  - Partial resource usage history
+
+### Resource Usage Patterns
+Each job type has specific resource usage patterns that vary over time:
+
+1. **Data Processing**
+   - CPU: Linear increase, plateau, gradual decrease
+   - Memory: Steady with periodic spikes
+   - Duration: 30 mins to 3 hours
+
+2. **Machine Learning**
+   - GPU: High at training, low during evaluation
+   - Memory: Gradual increase with model size
+   - Duration: 2 to 12 hours
+
+3. **Web Service**
+   - CPU: Variable based on traffic patterns
+   - Memory: Relatively stable
+   - Duration: 15 mins to 2 hours
+
+4. **Batch Processing**
+   - CPU: High during processing phases
+   - Disk: Heavy I/O patterns
+   - Duration: 1 to 6 hours
+
+5. **Analytics**
+   - Memory: Varies with dataset size
+   - CPU: Spikes during aggregations
+   - Duration: 30 mins to 3 hours
+
 ## Directory Structure
 
 ```
-cloudy/
-├── src/
-│   └── cloudy/
-│       ├── core/
-│       │   └── models.py         # Core data models (Job, Task, Instance)
-│       ├── scheduler/
-│       │   ├── scheduler.py      # Main scheduler implementation
-│       │   └── resource_manager.py # Resource allocation management
-│       └── utils/
-│           ├── workload_generator.py # Workload generation utilities
-│           ├── csv_writer.py     # CSV output generation
-│           └── verifier.py       # Execution verification
-├── tests/                        # Test files
-├── docs/                         # Documentation
-├── examples/                     # Example scripts
-├── generated_workloads/          # Output directory for workload data
-├── requirements.txt              # Project dependencies
-└── run_workload.py              # Main execution script
+CloudyGUI/
+├── .git/                       # Git version control files
+├── .gitignore                  # Files to be ignored by Git
+├── LICENSE                     # License file for the project
+├── README.md                   # Project documentation
+├── __pycache__/                # Python bytecode cache
+├── cloudy_web/                 # Web application files
+├── db.sqlite3                  # SQLite database
+├── docs/                       # Documentation files
+├── examples/                   # Example scripts
+├── generated_workloads/        # Output directory for workload data
+├── logo.png                    # Project logo
+├── manage.py                   # Django management script
+├── requirements.txt            # Project dependencies
+├── run_server.bat             # Batch file to run the server
+├── run_workload.py             # Script to run workloads
+├── src/                        # Source code
+├── static/                     # Static files
+├── staticfiles/                # Collected static files
+├── templates/                  # HTML templates
+├── tests/                      # Test files
+└── workload_manager/           # Workload management files
 ```
 
 ## Installation
