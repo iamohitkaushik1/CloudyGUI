@@ -36,61 +36,108 @@ The core functionality is based on [Cloudy](https://github.com/ahmad-siavashi/cl
 
 CloudyGUI includes a powerful workload generator that simulates realistic workloads for cloud computing environments. The generator creates dynamic resource utilization patterns and provides detailed visualizations of resource usage over time.
 
-### System Resources
-
-The workload generator simulates a high-performance computing environment with the following resources:
-
+### Virtual Machine Specifications
 - CPU: 512 cores
+  - Supports parallel processing
+  - Dynamic allocation based on job requirements
+  - Configurable core limits per job type
+  
 - Memory: 2TB RAM
+  - High-bandwidth memory access
+  - Scalable allocation from 4GB to 512GB per job
+  - Memory usage patterns based on job type
+  
 - GPU: 32 units
-- Disk: 10TB storage
+  - Dedicated GPU resources for ML workloads
+  - Fractional GPU allocation supported
+  - GPU sharing between compatible jobs
+  
+- Storage: 10TB disk space
+  - High-speed SSD storage
+  - Dynamic I/O patterns
+  - Configurable per-job storage limits
 
-### Job Types and Resource Patterns
+### Resource Allocation Strategy
+- Dynamic resource scaling based on job requirements
+- Automatic resource adjustment based on job progress
+- Resource usage patterns specific to job types
+- Built-in resource limits to prevent overallocation
 
-1. Data Processing (30% of jobs)
-   - CPU: 4-32 cores
-   - Memory: 8-128GB
-   - GPU: 0-2 units
-   - Disk: 100-500GB
+### Time Window Management
 
-2. Machine Learning (25% of jobs)
-   - CPU: 8-64 cores
-   - Memory: 16-256GB
-   - GPU: 1-4 units
-   - Disk: 200-1000GB
+The workload generator uses a sophisticated 7-day time window system for job distribution and resource tracking:
 
-3. Web Service (20% of jobs)
-   - CPU: 2-16 cores
-   - Memory: 4-32GB
-   - GPU: None
-   - Disk: 50-200GB
+### Time Window Configuration
+- Window Size: 7 days (configurable)
+- Base Time: Current time minus 7 days
+- Resolution: 5-minute intervals for resource tracking
 
-4. Batch Processing (15% of jobs)
-   - CPU: 16-128 cores
-   - Memory: 32-512GB
-   - GPU: 0-8 units
-   - Disk: 500-2000GB
+### Job Timing Distribution
+1. **Submit Time**
+   - Distributed across the 7-day window
+   - Random distribution with weighted recent hours
+   - Ensures realistic job arrival patterns
 
-5. Analytics (10% of jobs)
-   - CPU: 4-32 cores
-   - Memory: 16-128GB
-   - GPU: 0-2 units
-   - Disk: 200-800GB
+2. **Start Time**
+   - For running jobs: Between submit time and current time
+   - For completed jobs: Between submit time and end time
+   - For failed jobs: Limited duration based on failure point
 
-### Job Status Distribution
+3. **End Time**
+   - Terminated jobs: Full planned duration
+   - Failed jobs: Partial duration (up to 50% of planned)
+   - Running jobs: Calculated based on task type
+   - Interrupted jobs: Random duration up to max
 
-- Waiting: 20%
-- Running: 30%
-- Terminated: 35%
-- Failed: 10%
-- Interrupted: 5%
+### Status-based Timing
+- **Waiting Jobs (20%)**
+  - No start/end time set
+  - Resources reserved but not allocated
+  
+- **Running Jobs (30%)**
+  - Start time set
+  - End time calculated based on progress
+  - Dynamic resource usage
+  
+- **Terminated Jobs (35%)**
+  - Complete start/end time window
+  - Full resource usage history
+  
+- **Failed Jobs (10%)**
+  - Partial duration
+  - Resource usage until failure point
+  
+- **Interrupted Jobs (5%)**
+  - Random duration up to maximum
+  - Partial resource usage history
 
-### Time Window
+### Resource Usage Patterns
+Each job type has specific resource usage patterns that vary over time:
 
-The workload generator uses a 7-day time window for job distribution:
-- Jobs are distributed across the past 7 days
-- Submit times, start times, and end times are calculated based on job status
-- Resource usage patterns vary over time based on job progress
+1. **Data Processing**
+   - CPU: Linear increase, plateau, gradual decrease
+   - Memory: Steady with periodic spikes
+   - Duration: 30 mins to 3 hours
+
+2. **Machine Learning**
+   - GPU: High at training, low during evaluation
+   - Memory: Gradual increase with model size
+   - Duration: 2 to 12 hours
+
+3. **Web Service**
+   - CPU: Variable based on traffic patterns
+   - Memory: Relatively stable
+   - Duration: 15 mins to 2 hours
+
+4. **Batch Processing**
+   - CPU: High during processing phases
+   - Disk: Heavy I/O patterns
+   - Duration: 1 to 6 hours
+
+5. **Analytics**
+   - Memory: Varies with dataset size
+   - CPU: Spikes during aggregations
+   - Duration: 30 mins to 3 hours
 
 ## Directory Structure
 
