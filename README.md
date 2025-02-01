@@ -1,134 +1,142 @@
-# Cloudy: a modern simulator of cloud environments
+# Cloudy - Hierarchical Workload Management System
 
-[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
-[![GitHub last commit](https://img.shields.io/github/last-commit/ahmad-siavashi/cloudy.svg)](https://github.com/ahmad-siavashi/cloudy)
-[![Documentation](https://img.shields.io/badge/documentation-included-blue.svg)](https://github.com/ahmad-siavashi/cloudy/tree/main/docs)
-![GitHub stars](https://img.shields.io/github/stars/ahmad-siavashi/cloudy?style=social)
-[![GitHub forks](https://img.shields.io/github/forks/ahmad-siavashi/cloudy.svg?style=social&label=Fork)](https://github.com/ahmad-siavashi/cloudy)
+A Python-based workload management system that handles hierarchical job scheduling with dependencies and resource management.
 
-![logo](logo.png)
+## Features
 
-Cloudy is a framework designed for modeling and simulating cloud computing environments and services. It
-provides the necessary components that researchers and studies require to investigate new concepts and expedite the
-development and evaluation process in the evolving field of cloud computing. The choice of Python as the programming
-language for Cloudy is for its user-friendly nature and efficient compatibility with third-party libraries. This
-decision addresses certain limitations found in other simulators. The simulator is built to be flexible,
-capable of supporting a variety of cloud-based services to meet the diverse requirements of researchers.
+- **Hierarchical Structure**: Jobs → Tasks → Instances hierarchy for complex workload modeling
+- **Priority Scheduling**: Jobs are scheduled based on priority levels and resource availability
+- **Resource Management**: Efficient allocation of CPU, Memory, and GPU resources
+- **Dependency Handling**: Support for job dependencies with cycle detection
+- **Status Tracking**: Comprehensive tracking of job states (pending, running, terminated, interrupted)
+- **Failure Simulation**: Random interruption simulation for realistic workload testing
+- **Output Analysis**: CSV output generation for detailed workload analysis
 
-## Getting Started
+## Directory Structure
 
-The simulator is designed to be easy to use and extend. To run Cloudy,
+```
+cloudy/
+├── src/
+│   └── cloudy/
+│       ├── core/
+│       │   └── models.py         # Core data models (Job, Task, Instance)
+│       ├── scheduler/
+│       │   ├── scheduler.py      # Main scheduler implementation
+│       │   └── resource_manager.py # Resource allocation management
+│       └── utils/
+│           ├── workload_generator.py # Workload generation utilities
+│           ├── csv_writer.py     # CSV output generation
+│           └── verifier.py       # Execution verification
+├── tests/                        # Test files
+├── docs/                         # Documentation
+├── examples/                     # Example scripts
+├── generated_workloads/          # Output directory for workload data
+├── requirements.txt              # Project dependencies
+└── run_workload.py              # Main execution script
+```
 
-1. Clone the project
+## Installation
 
-    ```bash 
-    $ git clone https://github.com/ahmad-siavashi/cloudy.git 
-    ```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ahmad-siavashi/cloudy.git
+   cd cloudy
+   ```
 
-2. Install [Python 3.10](https://wiki.python.org/moin/BeginnersGuide/Download)
+2. Create and activate a virtual environment (recommended):
+   ```bash
+   python -m venv venv
+   # On Windows
+   .\venv\Scripts\activate
+   # On Linux/Mac
+   source venv/bin/activate
+   ```
 
-3. Install dependencies
-     ```bash
-     $ pip install -r requirements.txt
-     ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-4. Set up `PYTHONPATH` environment variable
-    - Determine the path to your project source root directory (where `cloudy/src` is located).
-   #### Windows PowerShell
-     ```powershell
-     $env:PYTHONPATH = "<path_to_project_root>;$env:PYTHONPATH"
-     ```
+## Usage
 
-   #### Windows Command Prompt (CMD)
-     ```batch
-     set PYTHONPATH=<path_to_project_root>;%PYTHONPATH%
-     ```
-   #### Linux (Bash)
-     ```bash
-     export PYTHONPATH=<path_to_project_root>:$PYTHONPATH
-     ```
+1. Run the workload simulation:
+   ```bash
+   python run_workload.py
+   ```
 
-   **Note:** _Depending on your operating system and shell environment, you may need to replace backslashes with double
-   backslashes when setting the `PYTHONPATH` variable on Windows. For example, if the path to your project root
-   directory is `C:\path\to\cloudy\src`, you should set the `PYTHONPATH` variable as `C:\\path\\to\\cloudy\\src"` in
-   Windows environments. This is due to the way backslashes are treated as escape characters in certain contexts. Linux
-   environments do not require this adjustment._
+2. Check the generated output:
+   - Workload data will be saved in the `generated_workloads` directory
+   - Review `workload_output.csv` for detailed execution information
 
-5. Run an example
-      ```bash
-      $ python3 basic_example.py
-      ```
+### Job Types and Resource Requirements
 
-That's all. The code is minimal, self-documented and easy to read. You can quickly start coding by reading the existing
-code and example. Nevertheless, documentations are provided in the `docs` directory.
+The system supports different job types with varying resource requirements:
 
-## Examples
+- **Batch Processing**
+  - CPU: 10-30 cores
+  - Memory: 2-6 GB
+  - GPU: None
 
-Explore the capabilities of Cloudy by checking out the examples in the `examples` directory. These examples demonstrate
-some use cases and functionalities of the simulator.
+- **Machine Learning**
+  - CPU: 20-40 cores
+  - Memory: 4-8 GB
+  - GPU: 1-2 units
+
+- **Data Analytics**
+  - CPU: 10-30 cores
+  - Memory: 2-6 GB
+  - GPU: None
+
+- **Web Service**
+  - CPU: 10-30 cores
+  - Memory: 2-6 GB
+  - GPU: None
+
+### Status Types
+
+Instances can have the following states:
+- `pending`: Initial state, waiting for resources
+- `running`: Currently executing
+- `terminated`: Successfully completed
+- `interrupted`: Execution interrupted (5% chance per update)
 
 ## Development
 
-The simulator is a work in progress. Please feel free to develop new features or make improvements. You can contact me
-through [email](mailto:siavashi@aut.ac.ir). For ensuring the reliability of the codebase, limited unit tests are
-available in
-the `tests` directory. You are encouraged to add more tests as you contribute to the project.
+### Adding New Features
 
-**Generating HTML Documentation with PyDoctor**
+1. **New Job Types**:
+   - Add job type in `workload_generator.py`
+   - Define resource requirements in the generator
 
-To regenerate HTML documentation for the Python code using PyDoctor, run the following command in the terminal or
-command prompt while you are within the project root directory, i.e. cloudy:
+2. **Custom Scheduling Policies**:
+   - Extend the `Scheduler` class in `scheduler.py`
+   - Implement new scheduling algorithms
+
+3. **Resource Management**:
+   - Modify `resource_manager.py` for new resource types
+   - Update allocation/deallocation logic
+
+### Running Tests
 
 ```bash
-$ pip install pydoctor
-$ pydoctor --project-name cloudy --html-output ./docs/ --docformat=numpy ./src/model/ ./src/module/ ./src/policy/
+python -m unittest discover tests
 ```
 
-PyDoctor will analyze the code and generate the HTML documentation, which can be accessed in the
-specified `doc` directory. The docstrings are written
-with [numpy style](https://numpydoc.readthedocs.io/en/latest/format.html).
+## Dependencies
 
-**Architecture**
+- Python 3.6+
+- networkx==3.3: Graph operations for dependency management
+- evque==1.4.1: Event queue implementation
+- cloca==1.1.1: Cloud computing utilities
 
-Cloudy works mainly as a discrete-time simulation but also includes some features of
-event-driven simulations. It operates by checking and updating the system at regular, set intervals. This is like a
-clock ticking at a steady pace. However, Cloudy can also handle new situations or "events" that come up during these
-intervals, dealing with them later. This mix of a steady, predictable pattern with the ability to react to unexpected
-events makes Cloudy versatile. It's especially useful for simulations that need regular updates but also must adapt to
-sudden changes.
+## License
 
-The simulator is built in a way that's easy to understand, using Python libraries. It uses two main
-libraries: [evque](https://github.com/ahmad-siavashi/evque) and [cloca](https://github.com/ahmad-siavashi/cloca). Cloca
-acts like a master clock, keeping everything in the simulation in sync. Evque is used for communication within the
-simulation, allowing different parts to exchange information without directly knowing each other. This setup makes
-Cloudy flexible and scalable, suitable for complex tasks.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-### Topics
+## Contributing
 
-Here is an explanation of the main events used in the Cloudy simulator, along with a short explanation of what they mean
-and when they are used:
-
-| Name        | Description                                                                                          |
-|-------------------|:-----------------------------------------------------------------------------------------------------|
-| *request.arrive*  | This event happens when a request comes in. It counts and records these requests in the simulator.   |
-| *request.accept*  | This happens when a request is approved, and the approval is noted down.                             |
-| *request.reject*  | This occurs when a request is turned down, and the rejection is recorded.                            |
-| *request.stop*    | This event is for when a request is finished or stopped, and this is also noted in the records.      |
-| *action.execute*  | This deals with carrying out a series of actions. What happens depends on the specific instructions. |
-| *app.start*       | This marks the beginning of an application running on a VM.                                          |
-| *app.stop*        | This is when an application on a VM is stopped.                                                      |
-| *container.start* | This is for starting a container on a VM.                                                            |
-| *container.stop*  | This is for stopping a container on a VM.                                                            |
-| *controller.start* | This indicates the start of a controller on a VM.                                                    |
-| *controller.stop* | This is when a controller on a VM is stopped.                                                        |
-| *deployment.run*  | This shows when a deployment is actively running.                                                    |
-| *deployment.pend* | This means a deployment is waiting for resources.                                                    |
-| *deployment.degrade*| This indicates a deployment is not running optimally with some replicas still pending.               |
-| *deployment.scale* | This is when the size of a deployment is changed, either by adding or removing replicas.             |
-| *deployment.stop* | This is when a deployment is completely stopped.                                                     |
-| *vm.allocate*     | This happens when a VM is assigned to a physical machine (PM).                                       |
-| *vm.deallocate*   | This is when a VM is removed or released from a PM.                                                  |
-| *sim.log*         | This is for the general logging mechanism of the simulation.                                          |
-
-The system for handling these events is made to be flexible, so developers can add new things or change it to suit their
-needs.
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request

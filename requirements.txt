@@ -1,2 +1,3 @@
+networkx==3.3
 evque==1.4.1
 cloca==1.1.1
