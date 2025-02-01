@@ -142,24 +142,28 @@ Each job type has specific resource usage patterns that vary over time:
 ## Directory Structure
 
 ```
-cloudy/
-├── src/
-│   └── cloudy/
-│       ├── core/
-│       │   └── models.py         # Core data models (Job, Task, Instance)
-│       ├── scheduler/
-│       │   ├── scheduler.py      # Main scheduler implementation
-│       │   └── resource_manager.py # Resource allocation management
-│       └── utils/
-│           ├── workload_generator.py # Workload generation utilities
-│           ├── csv_writer.py     # CSV output generation
-│           └── verifier.py       # Execution verification
-├── tests/                        # Test files
-├── docs/                         # Documentation
-├── examples/                     # Example scripts
-├── generated_workloads/          # Output directory for workload data
-├── requirements.txt              # Project dependencies
-└── run_workload.py              # Main execution script
+CloudyGUI/
+├── .git/                       # Git version control files
+├── .gitignore                  # Files to be ignored by Git
+├── LICENSE                     # License file for the project
+├── README.md                   # Project documentation
+├── __pycache__/                # Python bytecode cache
+├── cloudy_web/                 # Web application files
+├── db.sqlite3                  # SQLite database
+├── docs/                       # Documentation files
+├── examples/                   # Example scripts
+├── generated_workloads/        # Output directory for workload data
+├── logo.png                    # Project logo
+├── manage.py                   # Django management script
+├── requirements.txt            # Project dependencies
+├── run_server.bat             # Batch file to run the server
+├── run_workload.py             # Script to run workloads
+├── src/                        # Source code
+├── static/                     # Static files
+├── staticfiles/                # Collected static files
+├── templates/                  # HTML templates
+├── tests/                      # Test files
+└── workload_manager/           # Workload management files
 ```
 
 ## Installation
