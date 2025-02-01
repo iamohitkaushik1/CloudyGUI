@@ -21,7 +21,6 @@ This GUI version is built upon the robust foundation of the original [Cloudy](ht
 
 The core functionality is based on [Cloudy](https://github.com/ahmad-siavashi/cloudy), developed by [Ahmad Siavashi](https://github.com/ahmad-siavashi). We highly recommend checking out the original repository for understanding the underlying workload management system:
 - Original Repository: [https://github.com/ahmad-siavashi/cloudy](https://github.com/ahmad-siavashi/cloudy)
-- Core Features: Hierarchical job scheduling, dependency management, resource allocation
 
 ## Features
 
