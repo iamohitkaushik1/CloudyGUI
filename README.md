@@ -1,6 +1,21 @@
-# Cloudy - Hierarchical Workload Management System
+# Cloudy GUI - Enhanced Workload Management System
 
-A Python-based workload management system that handles hierarchical job scheduling with dependencies and resource management.
+This is a customized and enhanced version of [Cloudy](https://github.com/ahmad-siavashi/cloudy), originally developed by [Ahmad Siavashi](https://github.com/ahmad-siavashi). Our version adds a modern web interface and additional features for workload visualization and management.
+
+## Added Features & Enhancements
+
+- Modern web-based GUI using Django framework
+- Interactive resource usage visualizations with Chart.js
+- Enhanced workload generation with additional parameters
+- Real-time resource tracking (CPU, Memory, GPU, Disk)
+- Timeline views for resource utilization
+- Improved CSV export with detailed metrics
+- Responsive design with Bootstrap
+- Job type distribution analysis
+
+## Original Project
+
+This project is based on [Cloudy](https://github.com/ahmad-siavashi/cloudy), a workload management system. We have built upon the original work to add a graphical interface and enhanced functionality while maintaining compatibility with the core features.
 
 ## Features
 
@@ -37,101 +52,75 @@ cloudy/
 
 ## Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/ahmad-siavashi/cloudy.git
-   cd cloudy
-   ```
-
-2. Create and activate a virtual environment (recommended):
-   ```bash
-   python -m venv venv
-   # On Windows
-   .\venv\Scripts\activate
-   # On Linux/Mac
-   source venv/bin/activate
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Usage
-
-1. Run the workload simulation:
-   ```bash
-   python run_workload.py
-   ```
-
-2. Check the generated output:
-   - Workload data will be saved in the `generated_workloads` directory
-   - Review `workload_output.csv` for detailed execution information
-
-### Job Types and Resource Requirements
-
-The system supports different job types with varying resource requirements:
-
-- **Batch Processing**
-  - CPU: 10-30 cores
-  - Memory: 2-6 GB
-  - GPU: None
-
-- **Machine Learning**
-  - CPU: 20-40 cores
-  - Memory: 4-8 GB
-  - GPU: 1-2 units
-
-- **Data Analytics**
-  - CPU: 10-30 cores
-  - Memory: 2-6 GB
-  - GPU: None
-
-- **Web Service**
-  - CPU: 10-30 cores
-  - Memory: 2-6 GB
-  - GPU: None
-
-### Status Types
-
-Instances can have the following states:
-- `pending`: Initial state, waiting for resources
-- `running`: Currently executing
-- `terminated`: Successfully completed
-- `interrupted`: Execution interrupted (5% chance per update)
-
-## Development
-
-### Adding New Features
-
-1. **New Job Types**:
-   - Add job type in `workload_generator.py`
-   - Define resource requirements in the generator
-
-2. **Custom Scheduling Policies**:
-   - Extend the `Scheduler` class in `scheduler.py`
-   - Implement new scheduling algorithms
-
-3. **Resource Management**:
-   - Modify `resource_manager.py` for new resource types
-   - Update allocation/deallocation logic
-
-### Running Tests
-
+1. Clone this repository:
 ```bash
-python -m unittest discover tests
+git clone https://github.com/iamohitkaushik1/CloudyGUI.git
+cd CloudyGUI
 ```
 
-## Dependencies
+2. Create a virtual environment and activate it:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-- Python 3.6+
-- networkx==3.3: Graph operations for dependency management
-- evque==1.4.1: Event queue implementation
-- cloca==1.1.1: Cloud computing utilities
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-## License
+4. Run migrations:
+```bash
+python manage.py migrate
+```
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+5. Start the development server:
+```bash
+python manage.py runserver
+```
+
+Visit http://localhost:8000 in your browser to access the application.
+
+## Example Usage
+
+1. Set Workload Parameters:
+   - Number of jobs
+   - Tasks per job
+   - Instances per task
+
+2. Generate Workload:
+   - Click "Generate Workload" to create a new workload
+   - View resource usage statistics and distribution
+   - Analyze job type distribution
+
+3. Visualize Resources:
+   - CPU usage over time
+   - Memory usage over time
+   - GPU usage over time
+   - Disk usage over time
+   - Active jobs timeline
+
+4. Download Data:
+   - Click "Download CSV" to get the workload data
+   - Use the data for further analysis or integration
+
+## Resource Types
+
+The system supports various resource types:
+
+- **CPU**: Measured in cores
+- **Memory**: Measured in GB
+- **GPU**: Measured in units
+- **Disk**: Measured in GB
+
+## Job Types
+
+Different job types have different resource patterns:
+
+- **Machine Learning**: Higher GPU and memory usage
+- **Batch Processing**: Balanced CPU and memory usage
+- **Data Analytics**: Higher memory usage
+- **Web Service**: Lower but consistent resource usage
 
 ## Contributing
 
@@ -140,3 +129,23 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 3. Commit your changes
 4. Push to the branch
 5. Create a Pull Request
+
+## Issues and Support
+
+For bug reports and feature requests, please use the [GitHub Issues](https://github.com/iamohitkaushik1/CloudyGUI/issues) page.
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details. This is in accordance with the license of the original [Cloudy](https://github.com/ahmad-siavashi/cloudy) project.
+
+## Credits
+
+- Original Cloudy project by [Ahmad Siavashi](https://github.com/ahmad-siavashi)
+- GUI enhancements and additional features by [Mohit Kaushik](https://github.com/iamohitkaushik1)
+
+## Acknowledgments
+
+- Built with Django and Chart.js
+- Uses Bootstrap for responsive design
+- Font Awesome for icons
+- Thanks to the original Cloudy project team for the foundation
