@@ -1,6 +1,10 @@
 # Cloudy GUI - Enhanced Workload Management System
 
-This is a customized and enhanced version of [Cloudy](https://github.com/ahmad-siavashi/cloudy), originally developed by [Ahmad Siavashi](https://github.com/ahmad-siavashi). Our version adds a modern web interface and additional features for workload visualization and management.
+A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy), developed in collaboration with [Ahmad Siavashi](https://github.com/ahmad-siavashi). This version extends the original [Cloudy Workload Management System](https://github.com/ahmad-siavashi/cloudy) by adding a modern web interface and enhanced visualization capabilities.
+
+## About This Version
+
+This GUI version is built upon the robust foundation of the original [Cloudy](https://github.com/ahmad-siavashi/cloudy) project, enhancing it with a user-friendly interface and additional features. The collaboration maintains the core functionality while making the system more accessible and visual.
 
 ## Added Features & Enhancements
 
@@ -15,7 +19,9 @@ This is a customized and enhanced version of [Cloudy](https://github.com/ahmad-s
 
 ## Original Project
 
-This project is based on [Cloudy](https://github.com/ahmad-siavashi/cloudy), a workload management system. We have built upon the original work to add a graphical interface and enhanced functionality while maintaining compatibility with the core features.
+The core functionality is based on [Cloudy](https://github.com/ahmad-siavashi/cloudy), developed by [Ahmad Siavashi](https://github.com/ahmad-siavashi). We highly recommend checking out the original repository for understanding the underlying workload management system:
+- Original Repository: [https://github.com/ahmad-siavashi/cloudy](https://github.com/ahmad-siavashi/cloudy)
+- Core Features: Hierarchical job scheduling, dependency management, resource allocation
 
 ## Features
 
@@ -138,14 +144,18 @@ For bug reports and feature requests, please use the [GitHub Issues](https://git
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details. This is in accordance with the license of the original [Cloudy](https://github.com/ahmad-siavashi/cloudy) project.
 
-## Credits
+## Credits and Collaboration
 
-- Original Cloudy project by [Ahmad Siavashi](https://github.com/ahmad-siavashi)
-- GUI enhancements and additional features by [Mohit Kaushik](https://github.com/iamohitkaushik1)
+This project is a collaborative effort:
+
+- Original [Cloudy](https://github.com/ahmad-siavashi/cloudy) project by [Ahmad Siavashi](https://github.com/ahmad-siavashi)
+- GUI implementation and enhancements by [Mohit Kaushik](https://github.com/iamohitkaushik1)
+- Made in collaboration with the original Cloudy project team
 
 ## Acknowledgments
 
 - Built with Django and Chart.js
 - Uses Bootstrap for responsive design
 - Font Awesome for icons
-- Thanks to the original Cloudy project team for the foundation
+- Special thanks to [Ahmad Siavashi](https://github.com/ahmad-siavashi) and the original Cloudy project team for their excellent foundation work
+- Original Repository: [https://github.com/ahmad-siavashi/cloudy](https://github.com/ahmad-siavashi/cloudy)
