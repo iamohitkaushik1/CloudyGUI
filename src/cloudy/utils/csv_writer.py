@@ -46,13 +46,20 @@ def write_workload_to_csv(workload, output_file):
             'Priority',
             'Job Status',
             'Dependencies',
+            'Job Start Time',
+            'Job End Time',
             'Task ID', 
             'Task Status',
+            'Task Start Time',
+            'Task End Time',
             'Instance ID', 
             'Instance Status',
+            'Instance Start Time',
+            'Instance End Time',
             'CPU', 
-            'Memory', 
-            'GPU'
+            'Memory (MB)', 
+            'GPU',
+            'Disk (GB)'
         ])
         
         for job in workload:
@@ -64,11 +71,18 @@ def write_workload_to_csv(workload, output_file):
                         job.priority,
                         job.status,
                         ','.join(job.dependencies) if job.dependencies else '',
+                        job.start_time.strftime('%Y-%m-%d %H:%M:%S') if job.start_time else '',
+                        job.end_time.strftime('%Y-%m-%d %H:%M:%S') if job.end_time else '',
                         task.task_id,
                         task.status,
+                        task.start_time.strftime('%Y-%m-%d %H:%M:%S') if task.start_time else '',
+                        task.end_time.strftime('%Y-%m-%d %H:%M:%S') if task.end_time else '',
                         instance.instance_id,
                         instance.status,
-                        instance.cpu_required,
-                        instance.memory_required,
-                        instance.gpu_required
+                        instance.start_time.strftime('%Y-%m-%d %H:%M:%S') if instance.start_time else '',
+                        instance.end_time.strftime('%Y-%m-%d %H:%M:%S') if instance.end_time else '',
+                        round(instance.cpu_required, 2),
+                        round(instance.memory_required, 2),
+                        round(instance.gpu_required, 2),
+                        round(instance.disk_required, 2)
                     ])
