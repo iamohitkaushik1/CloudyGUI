@@ -1,6 +1,7 @@
 from queue import PriorityQueue
 from datetime import timedelta
 import networkx as nx
+import random
 
 class Scheduler:
     def __init__(self, resource_manager):
@@ -94,39 +95,189 @@ class Scheduler:
         return scheduled_jobs
     
     def update_job_status(self, current_time):
+        import random
         completed_job_ids = []
         
-        # Check for completed jobs and possible interruptions
+        # Define possible status transitions and their probabilities
+        # Increased probabilities for terminal states and reduced waiting times
+        instance_transitions = {
+            'pending': [('provisioning', 0.95), ('failed', 0.05)],  # Quick transition from pending
+            'provisioning': [('starting', 0.9), ('failed', 0.1)],   # Faster provisioning
+            'starting': [('running', 0.95), ('failed', 0.05)],      # Quick startup
+            'running': [
+                ('running', 0.4),      # 40% chance to keep running
+                ('terminated', 0.3),   # 30% chance to complete
+                ('degraded', 0.15),    # 15% chance to degrade
+                ('unhealthy', 0.1),    # 10% chance to become unhealthy
+                ('stopping', 0.05)     # 5% chance to stop
+            ],
+            'degraded': [
+                ('running', 0.4),      # 40% chance to recover
+                ('unhealthy', 0.3),    # 30% chance to get worse
+                ('stopping', 0.3)      # 30% chance to stop
+            ],
+            'unhealthy': [
+                ('running', 0.2),      # 20% chance to recover
+                ('stopping', 0.5),     # 50% chance to stop
+                ('failed', 0.3)        # 30% chance to fail
+            ],
+            'stopping': [('terminated', 0.95), ('failed', 0.05)]    # Quick termination
+        }
+        
+        # Adjusted job transitions for better flow
+        job_transitions = {
+            'pending': [('queued', 0.9), ('failed', 0.1)],
+            'queued': [('preparing', 0.8), ('throttled', 0.15), ('failed', 0.05)],
+            'preparing': [('running', 0.9), ('failed', 0.05), ('throttled', 0.05)],
+            'running': [
+                ('running', 0.3),      # 30% chance to keep running
+                ('completed', 0.4),    # 40% chance to complete
+                ('paused', 0.15),      # 15% chance to pause
+                ('interrupted', 0.1),  # 10% chance to interrupt
+                ('failed', 0.05)       # 5% chance to fail
+            ],
+            'paused': [('resuming', 0.8), ('failed', 0.2)],
+            'resuming': [('running', 0.9), ('failed', 0.1)],
+            'throttled': [('preparing', 0.8), ('failed', 0.2)],
+            'interrupted': [('preparing', 0.7), ('failed', 0.3)]
+        }
+        
+        # Maximum time limits for each state (in seconds)
+        max_state_duration = {
+            'pending': 300,        # 5 minutes
+            'provisioning': 180,   # 3 minutes
+            'starting': 120,       # 2 minutes
+            'running': 3600,       # 1 hour
+            'degraded': 600,       # 10 minutes
+            'unhealthy': 300,      # 5 minutes
+            'stopping': 180,       # 3 minutes
+            'queued': 600,        # 10 minutes
+            'preparing': 300,      # 5 minutes
+            'paused': 1800,       # 30 minutes
+            'resuming': 180,       # 3 minutes
+            'throttled': 900      # 15 minutes
+        }
+        
+        # Check for completed jobs and status transitions
         for job_id, (job, resources) in list(self.running_jobs.items()):
-            job_status = {'terminated': 0, 'running': 0, 'interrupted': 0, 'pending': 0}
+            instance_status_counts = {
+                'pending': 0, 'provisioning': 0, 'starting': 0, 'running': 0,
+                'degraded': 0, 'unhealthy': 0, 'stopping': 0, 'terminated': 0, 'failed': 0
+            }
             
+            # Force status change if in state too long
+            if hasattr(job, 'last_status_change') and job.last_status_change:
+                time_in_state = (current_time - job.last_status_change).total_seconds()
+                if job.status in max_state_duration and time_in_state > max_state_duration[job.status]:
+                    if job.status in ['pending', 'queued', 'preparing', 'provisioning', 'starting']:
+                        job.status = 'failed'
+                    elif job.status in ['running', 'degraded', 'unhealthy']:
+                        job.status = 'stopping'
+                    elif job.status in ['paused', 'resuming', 'throttled']:
+                        job.status = 'preparing'
+            
+            # Update job status based on conditions and randomization
+            if job.status in job_transitions:
+                transitions = job_transitions[job.status]
+                rand_val = random.random()
+                cumulative_prob = 0
+                
+                for new_status, prob in transitions:
+                    cumulative_prob += prob
+                    if rand_val <= cumulative_prob:
+                        old_status = job.status
+                        
+                        # Apply special conditions
+                        if new_status == 'failed' and job.retry_count < job.max_retries:
+                            job.retry_count += 1
+                            new_status = 'preparing'
+                        elif new_status == 'throttled':
+                            job.throttle_reason = random.choice([
+                                'resource_limit_exceeded',
+                                'rate_limit_reached',
+                                'system_maintenance'
+                            ])
+                        
+                        job.status = new_status
+                        job.last_status_change = current_time
+                        self.log_status_change(job_id, None, old_status, new_status, current_time)
+                        break
+            
+            # Update instance statuses independently
             for task in job.tasks:
                 for instance in task.instances:
-                    old_status = instance.status
+                    # Force instance status change if in state too long
+                    if instance.last_health_check:
+                        time_in_state = (current_time - instance.last_health_check).total_seconds()
+                        if instance.status in max_state_duration and time_in_state > max_state_duration[instance.status]:
+                            if instance.status in ['pending', 'provisioning', 'starting']:
+                                instance.status = 'failed'
+                            elif instance.status in ['running', 'degraded', 'unhealthy']:
+                                instance.status = 'stopping'
                     
-                    # Check for random interruptions (5% chance per update)
-                    if instance.status == 'running' and instance.error_rate > 0.95:
-                        instance.status = 'interrupted'
-                        instance.end_time = current_time
-                        self.log_status_change(job_id, instance.instance_id, old_status, 'interrupted', current_time)
+                    # Update performance metrics
+                    instance.update_performance_metrics()
                     
-                    # Check for completion
-                    elif instance.status == 'running' and instance.end_time <= current_time:
-                        instance.status = 'terminated'
-                        self.log_status_change(job_id, instance.instance_id, old_status, 'terminated', current_time)
+                    # Handle health checks
+                    if instance.status == 'running':
+                        if not instance.is_healthy():
+                            instance.health_check_failures += 1
+                            if instance.health_check_failures >= 3:
+                                instance.status = 'unhealthy'
+                        else:
+                            instance.health_check_failures = 0
                     
-                    job_status[instance.status] += 1
+                    # Apply random status transitions with time-based progression
+                    if instance.status in instance_transitions:
+                        transitions = instance_transitions[instance.status]
+                        rand_val = random.random()
+                        cumulative_prob = 0
+                        
+                        for new_status, prob in transitions:
+                            cumulative_prob += prob
+                            if rand_val <= cumulative_prob:
+                                old_status = instance.status
+                                
+                                # Handle special cases
+                                if new_status == 'failed' and instance.restart_count < instance.max_restarts:
+                                    instance.restart_count += 1
+                                    new_status = 'starting'
+                                    
+                                instance.status = new_status
+                                if new_status == 'running' and not instance.start_time:
+                                    instance.start_time = current_time
+                                elif new_status in ['terminated', 'failed']:
+                                    instance.end_time = current_time
+                                
+                                instance.last_health_check = current_time
+                                self.log_status_change(job_id, instance.instance_id, 
+                                                    old_status, new_status, current_time)
+                                break
+                    
+                    instance_status_counts[instance.status] += 1
             
-            # Determine overall job status
-            if job_status['interrupted'] > 0:
-                self.interrupted_jobs.add(job_id)
-                self.resource_manager.release(resources)
-                del self.running_jobs[job_id]
-            elif job_status['running'] == 0 and job_status['pending'] == 0:
-                # All instances are either terminated or interrupted
-                if job_status['terminated'] > 0:
+            # Determine job status based on instance states with adjusted thresholds
+            total_instances = sum(instance_status_counts.values())
+            failed_instances = instance_status_counts['failed']
+            terminated_instances = instance_status_counts['terminated']
+            running_instances = instance_status_counts['running']
+            healthy_instances = running_instances + instance_status_counts['degraded']
+            
+            # Update job status based on instance health with more aggressive completion
+            if terminated_instances / total_instances >= 0.8:
+                job.status = 'completed'
+            elif failed_instances / total_instances >= 0.5:
+                job.status = 'failed'
+            elif healthy_instances / total_instances < 0.3:
+                job.status = 'interrupted'
+            
+            # Handle job completion or removal
+            if job.status in ['completed', 'failed']:
+                if job.status == 'completed':
                     completed_job_ids.append(job_id)
                     self.completed_jobs.add(job_id)
+                else:
+                    self.interrupted_jobs.add(job_id)
                 self.resource_manager.release(resources)
                 del self.running_jobs[job_id]
         
@@ -145,14 +296,20 @@ class Scheduler:
     def get_status_summary(self):
         status_counts = {
             'pending': 0,
+            'queued': 0,
+            'preparing': 0,
             'running': 0,
-            'terminated': 0,
-            'interrupted': 0
+            'paused': 0,
+            'resuming': 0,
+            'completed': 0,
+            'failed': 0,
+            'interrupted': 0,
+            'throttled': 0
         }
         
-        for job_id, (job, _) in self.running_jobs.items():
-            for task in job.tasks:
-                for instance in task.instances:
-                    status_counts[instance.status] += 1
+        # Count job statuses
+        for job in self.all_jobs:
+            if hasattr(job, 'status'):
+                status_counts[job.status] = status_counts.get(job.status, 0) + 1
         
         return status_counts
