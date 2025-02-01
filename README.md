@@ -149,7 +149,6 @@ This project is a collaborative effort:
 
 - Original [Cloudy](https://github.com/ahmad-siavashi/cloudy) project by [Ahmad Siavashi](https://github.com/ahmad-siavashi)
 - GUI implementation and enhancements by [Mohit Kaushik](https://github.com/iamohitkaushik1)
-- Made in collaboration with the original Cloudy project team
 
 ## Acknowledgments
 
