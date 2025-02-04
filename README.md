@@ -32,6 +32,39 @@ The core functionality is based on [Cloudy](https://github.com/ahmad-siavashi/cl
 - **Failure Simulation**: Random interruption simulation for realistic workload testing
 - **Output Analysis**: CSV output generation for detailed workload analysis
 
+## Standout Features of Cloudy Scheduler
+
+1. **Instance Types**:
+   - Supports both standard and spot instances, similar to AWS EC2 and GCP.
+
+2. **Preemption Logic**:
+   - Implements priority-based preemption, allowing higher priority jobs to interrupt lower priority ones.
+   - Includes a grace period before preemption, mimicking real cloud behavior.
+
+3. **Resource Management**:
+   - Enforces resource quotas to prevent overallocation, similar to limits set by cloud providers.
+   - Tracks resource usage dynamically.
+
+4. **Job States**:
+   - Manages various job states that reflect real cloud job lifecycles.
+   - Allows for transitions between states based on job progress and resource availability.
+
+5. **Failure Patterns**:
+   - Introduces realistic failure rates, reflecting the unpredictability of cloud environments.
+   - Handles job interruptions and failures gracefully.
+
+6. **Cost Considerations**:
+   - Incorporates cost calculations based on resource usage, job progress, and instance type.
+
+7. **Checkpointing**:
+   - Implements checkpointing for spot instances, allowing the system to save the state of jobs.
+
+8. **Dynamic Scheduling**:
+   - Continuously evaluates the job queue and updates job statuses based on resource availability.
+
+9. **Job Progress Tracking**:
+   - Monitors job progress and uses it to inform preemption decisions.
+
 ## Time Window Management
 
 The workload generator uses a sophisticated 7-day time window system for job distribution and resource tracking:
