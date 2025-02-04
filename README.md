@@ -2,19 +2,37 @@
 
 A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy), developed in collaboration with [Ahmad Siavashi](https://github.com/ahmad-siavashi). This version extends the original [Cloudy Workload Management System](https://github.com/ahmad-siavashi/cloudy) by adding a modern web interface and enhanced visualization capabilities.
 
-## Added Features & Enhancements
+---
 
-- Modern web-based GUI using Django framework
-- Interactive resource usage visualizations with Chart.js
-- Enhanced workload generation with additional parameters
-- Real-time resource tracking (CPU, Memory, GPU, Disk)
-- Timeline views for resource utilization
-- Improved CSV export with detailed metrics
-- Responsive design with Bootstrap
-- Job type distribution analysis
+## What's New in This Version
+- **Advanced Job Scheduling**: 
+  - Implemented a sophisticated job scheduling mechanism using a priority queue.
+  - Comprehensive dependency management, allowing jobs to specify dependencies and ensuring they are met before scheduling.
+  - Implementation of job preemption, enabling higher-priority jobs to interrupt lower-priority ones for resource allocation.
+
+- **Enhanced Resource Management**: 
+  - Detailed checks against resource quotas to optimize resource allocation.
+  - Dynamic resource allocation based on job requirements and current availability.
+  - Ability to preempt running jobs to free up resources for higher-priority tasks.
+
+- **Comprehensive Logging and Monitoring**: 
+  - Extensive logging of job status changes, errors, and system events for improved traceability.
+  - Enhanced monitoring features to track job progress and resource usage.
+
+- **Robust Error Handling**: 
+  - Improved error handling mechanisms with specific exceptions for scheduling and resource allocation issues.
+  - Detailed error logging to facilitate troubleshooting.
+
+- **User Interface and Usability**: 
+  - **Django and GUI-Based Interface**: Implementation of a Django web framework provides a modern and intuitive graphical user interface, enhancing user interaction with the scheduling system.
+  - Improved usability features for easier management of jobs and resources through a web interface.
+
+- **Integration of Advanced Features**: 
+  - Incorporates features that are more aligned with real cloud systems, such as dynamic scaling, enhanced scheduling algorithms, and real-time monitoring of job execution and resource usage.
+
+---
 
 ## Features
-
 - **Hierarchical Structure**: Jobs → Tasks → Instances hierarchy for complex workload modeling
 - **Priority Scheduling**: Jobs are scheduled based on priority levels and resource availability
 - **Resource Management**: Efficient allocation of CPU, Memory, and GPU resources
@@ -23,64 +41,18 @@ A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy
 - **Failure Simulation**: Random interruption simulation for realistic workload testing
 - **Output Analysis**: CSV output generation for detailed workload analysis
 
-# What's New in This Version
+---
 
-1. **Job Scheduling Mechanism**  
-   **Base Version (cloudy):**  
-   - Basic job scheduling with a simple queue management system.  
-   - Limited handling of job dependencies and priorities.  
-   - May not support advanced scheduling strategies.  
-   **New Version (CloudyGUI):**  
-   - Advanced job scheduling using a priority queue.  
-   - Comprehensive dependency management, allowing jobs to specify dependencies and ensuring they are met before scheduling.  
-   - Implementation of job preemption, enabling higher-priority jobs to interrupt lower-priority ones for resource allocation.  
-
-2. **Resource Management**  
-   **Base Version (cloudy):**  
-   - Basic resource allocation checks before scheduling jobs.  
-   - Limited dynamic resource management capabilities.  
-   **New Version (CloudyGUI):**  
-   - Enhanced resource management with detailed checks against resource quotas.  
-   - Dynamic resource allocation based on job requirements and current availability.  
-   - Ability to preempt running jobs to free up resources for higher-priority tasks.  
-
-3. **Logging and Monitoring**  
-   **Base Version (cloudy):**  
-   - Minimal logging capabilities, primarily focused on basic job execution.  
-   **New Version (CloudyGUI):**  
-   - Comprehensive logging of job status changes, errors, and system events for better traceability and debugging.  
-   - Enhanced monitoring features to track job progress and resource usage.  
-
-4. **Error Handling**  
-   **Base Version (cloudy):**  
-   - Basic error handling, primarily focused on job execution.  
-   **New Version (CloudyGUI):**  
-   - Robust error handling mechanisms that include specific exceptions for scheduling and resource allocation issues.  
-   - Detailed error logging to facilitate troubleshooting and improve system reliability.  
-
-5. **User Interface and Usability**  
-   **Base Version (cloudy):**  
-   - Primarily backend-focused with limited user interaction capabilities.  
-   **New Version (CloudyGUI):**  
-   - **Django and GUI-Based Interface**: Implementation of a Django web framework provides a modern and intuitive graphical user interface, enhancing user interaction with the scheduling system.  
-   - Improved usability features that allow for easier management of jobs and resources through a web interface.  
-
-6. **Integration of Advanced Features**  
-   **Base Version (cloudy):**  
-   - Lacks integration of advanced cloud features such as dynamic scaling, sophisticated scheduling algorithms, and real-time resource monitoring.  
-   **New Version (CloudyGUI):**  
-   - Incorporates features that are more aligned with real cloud systems, such as dynamic scaling, enhanced scheduling algorithms, and real-time monitoring of job execution and resource usage.
-
-### Time Window Management
+## Time Window Management
 
 The workload generator uses a sophisticated 7-day time window system for job distribution and resource tracking:
 
-#### Time Window Configuration
+### Time Window Configuration
 - **Window Size**: 7 days (configurable)
 - **Base Time**: Current time minus 7 days
 - **Resolution**: 5-minute intervals for resource tracking
 
-#### Job Timing Distribution
+### Job Timing Distribution
 1. **Submit Time**
    - Distributed across the 7-day window
    - Random distribution with weighted recent hours
@@ -97,7 +69,7 @@ The workload generator uses a sophisticated 7-day time window system for job dis
    - Running jobs: Calculated based on task type
    - Interrupted jobs: Random duration up to max
 
-#### Status-based Timing
+### Status-based Timing
 - **Waiting Jobs (20%)**
   - No start/end time set
   - Resources reserved but not allocated
@@ -119,10 +91,12 @@ The workload generator uses a sophisticated 7-day time window system for job dis
   - Random duration up to maximum
   - Partial resource usage history
 
-### Predefined Resources
+---
+
+## Predefined Resources
 The workload generator simulates a high-performance computing environment with the following virtual machine specifications:
 
-#### Virtual Machine Configurations
+### Virtual Machine Configurations
 - **VM 1**: 512 cores, 2TB RAM, 32 GPUs
 - **VM 2**: 256 cores, 1TB RAM, 16 GPUs
 - **VM 3**: 1024 cores, 4TB RAM, 64 GPUs
@@ -135,7 +109,9 @@ The system supports various job profiles, each specifying the resource requireme
 - **Data_Science**: 256 CPU, 1024MB RAM, 2 GPUs
 - **Web_Development**: 32 CPU, 128MB RAM, 0 GPU
 
-### Container Management
+---
+
+## Container Management
 Instances are managed within containers running on allocated virtual machines. Each instance is assigned to a container, which is created and started when the instance is initialized. This allows for better resource management and isolation of workloads.
 
 ### Container Lifecycle Management
@@ -144,11 +120,10 @@ Instances are managed within containers running on allocated virtual machines. E
 
 This architecture allows for efficient utilization of resources while maintaining flexibility in workload management.
 
-#### VM Resources
-
+### VM Resources
 The workload generator simulates a high-performance computing environment with the following resources:
 
-#### Virtual Machine Specifications
+### Virtual Machine Specifications
 - **CPU**: 512 cores
   - Supports parallel processing
   - Dynamic allocation based on job requirements
@@ -168,6 +143,8 @@ The workload generator simulates a high-performance computing environment with t
   - High-speed SSD storage
   - Dynamic I/O patterns
   - Configurable per-job storage limits
+
+---
 
 ## Project Structure
 
@@ -222,6 +199,8 @@ cloudy/
 
 This structure helps in organizing the project logically, making it easier to navigate and maintain.
 
+---
+
 ## Installation
 
 ### Installation
@@ -255,10 +234,13 @@ This structure helps in organizing the project logically, making it easier to na
    ```bash
    pip install -r requirements.txt
    ```
+
 7. Run Migrations
-   
    ```bash
    python manage.py migrate
+   ```
+
+---
 
 ## Running the Django Server
 
@@ -270,6 +252,8 @@ python manage.py runserver
 ```
 
 Visit http://localhost:8000 in your browser to access the application.
+
+---
 
 ## Example Usage
 
@@ -294,6 +278,8 @@ Visit http://localhost:8000 in your browser to access the application.
    - Click "Download CSV" to get the workload data
    - Use the data for further analysis or integration
 
+---
+
 ## Resource Types
 
 The system supports various resource types:
@@ -302,6 +288,8 @@ The system supports various resource types:
 - **Memory**: Measured in GB
 - **GPU**: Measured in units
 - **Disk**: Measured in GB
+
+---
 
 ## Job Types
 
@@ -312,6 +300,8 @@ Different job types have different resource patterns:
 - **Data Analytics**: Higher memory usage
 - **Web Service**: Lower but consistent resource usage
 
+---
+
 ## Contributing
 
 1. Fork the repository
@@ -320,13 +310,19 @@ Different job types have different resource patterns:
 4. Push to the branch
 5. Create a Pull Request
 
+---
+
 ## Issues and Support
 
 For bug reports and feature requests, please use the [GitHub Issues](https://github.com/iamohitkaushik1/CloudyGUI/issues) page.
 
+---
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details. This is in accordance with the license of the original [Cloudy](https://github.com/ahmad-siavashi/cloudy) project.
+
+---
 
 ## Credits and Collaboration
 
@@ -334,6 +330,8 @@ This project is a collaborative effort:
 
 - Original [Cloudy](https://github.com/ahmad-siavashi/cloudy) project by [Ahmad Siavashi](https://github.com/ahmad-siavashi)
 - GUI implementation and enhancements by [Mohit Kaushik](https://github.com/iamohitkaushik1)
+
+---
 
 ## Acknowledgments
 
