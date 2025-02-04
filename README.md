@@ -30,7 +30,8 @@ A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy
    - Basic job scheduling with a simple queue management system.  
    - Limited handling of job dependencies and priorities.  
    - May not support advanced scheduling strategies.  
-   **New Version (CloudyGUI):**  
+   **New Version (CloudyGUI):**
+       
    - Advanced job scheduling using a priority queue.  
    - Comprehensive dependency management, allowing jobs to specify dependencies and ensuring they are met before scheduling.  
    - Implementation of job preemption, enabling higher-priority jobs to interrupt lower-priority ones for resource allocation.  
@@ -39,7 +40,8 @@ A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy
    **Base Version (cloudy):**  
    - Basic resource allocation checks before scheduling jobs.  
    - Limited dynamic resource management capabilities.  
-   **New Version (CloudyGUI):**  
+   **New Version (CloudyGUI):**
+       
    - Enhanced resource management with detailed checks against resource quotas.  
    - Dynamic resource allocation based on job requirements and current availability.  
    - Ability to preempt running jobs to free up resources for higher-priority tasks.  
@@ -47,28 +49,32 @@ A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy
 3. **Logging and Monitoring**  
    **Base Version (cloudy):**  
    - Minimal logging capabilities, primarily focused on basic job execution.  
-   **New Version (CloudyGUI):**  
+   **New Version (CloudyGUI):**
+       
    - Comprehensive logging of job status changes, errors, and system events for better traceability and debugging.  
    - Enhanced monitoring features to track job progress and resource usage.  
 
 4. **Error Handling**  
    **Base Version (cloudy):**  
    - Basic error handling, primarily focused on job execution.  
-   **New Version (CloudyGUI):**  
+   **New Version (CloudyGUI):**
+      
    - Robust error handling mechanisms that include specific exceptions for scheduling and resource allocation issues.  
    - Detailed error logging to facilitate troubleshooting and improve system reliability.  
 
 5. **User Interface and Usability**  
    **Base Version (cloudy):**  
    - Primarily backend-focused with limited user interaction capabilities.  
-   **New Version (CloudyGUI):**  
+   **New Version (CloudyGUI):**
+      
    - **Django and GUI-Based Interface**: Implementation of a Django web framework provides a modern and intuitive graphical user interface, enhancing user interaction with the scheduling system.  
    - Improved usability features that allow for easier management of jobs and resources through a web interface.  
 
 6. **Integration of Advanced Features**  
    **Base Version (cloudy):**  
    - Lacks integration of advanced cloud features such as dynamic scaling, sophisticated scheduling algorithms, and real-time resource monitoring.  
-   **New Version (CloudyGUI):**  
+   **New Version (CloudyGUI):**
+      
    - Incorporates features that are more aligned with real cloud systems, such as dynamic scaling, enhanced scheduling algorithms, and real-time monitoring of job execution and resource usage.
 
 ### Time Window Management
