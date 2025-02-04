@@ -159,8 +159,6 @@ This architecture allows for efficient utilization of resources while maintainin
 
 ### VM Resources
 The workload generator simulates a high-performance computing environment with the following resources:
-
-### Virtual Machine Specifications
 - **CPU**: 512 cores
   - Supports parallel processing
   - Dynamic allocation based on job requirements
