@@ -48,8 +48,20 @@ def generate_workload_view(request):
             
             # Time-series data for line graphs
             timeline_data = []
-            start_time = min(job.start_time for job in workload if job.start_time)
-            end_time = max(job.end_time for job in workload if job.end_time)
+            
+            # Get jobs with start and end times
+            jobs_with_start = [job for job in workload if job.start_time]
+            jobs_with_end = [job for job in workload if job.end_time]
+            
+            # Check if we have any jobs with times
+            if not jobs_with_start or not jobs_with_end:
+                # Handle the case where no jobs have start/end times
+                current_time = datetime.now()
+                start_time = current_time - timedelta(hours=1)  # Default to 1 hour ago
+                end_time = current_time
+            else:
+                start_time = min(job.start_time for job in jobs_with_start)
+                end_time = max(job.end_time for job in jobs_with_end)
             
             # Generate timeline data points
             current = start_time
