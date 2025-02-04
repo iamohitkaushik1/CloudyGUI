@@ -2,10 +2,6 @@
 
 A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy), developed in collaboration with [Ahmad Siavashi](https://github.com/ahmad-siavashi). This version extends the original [Cloudy Workload Management System](https://github.com/ahmad-siavashi/cloudy) by adding a modern web interface and enhanced visualization capabilities.
 
-## About This Version
-
-This GUI version is built upon the robust foundation of the original [Cloudy](https://github.com/ahmad-siavashi/cloudy) project, enhancing it with a user-friendly interface and additional features. The collaboration maintains the core functionality while making the system more accessible and visual.
-
 ## Added Features & Enhancements
 
 - Modern web-based GUI using Django framework
@@ -17,11 +13,6 @@ This GUI version is built upon the robust foundation of the original [Cloudy](ht
 - Responsive design with Bootstrap
 - Job type distribution analysis
 
-## Original Project
-
-The core functionality is based on [Cloudy](https://github.com/ahmad-siavashi/cloudy), developed by [Ahmad Siavashi](https://github.com/ahmad-siavashi). We highly recommend checking out the original repository for understanding the underlying workload management system:
-- Original Repository: [https://github.com/ahmad-siavashi/cloudy](https://github.com/ahmad-siavashi/cloudy)
-
 ## Features
 
 - **Hierarchical Structure**: Jobs → Tasks → Instances hierarchy for complex workload modeling
@@ -32,49 +23,64 @@ The core functionality is based on [Cloudy](https://github.com/ahmad-siavashi/cl
 - **Failure Simulation**: Random interruption simulation for realistic workload testing
 - **Output Analysis**: CSV output generation for detailed workload analysis
 
-## Standout Features of Cloudy Scheduler
+# What's New in This Version
 
-1. **Instance Types**:
-   - Supports both standard and spot instances, similar to AWS EC2 and GCP.
+1. **Job Scheduling Mechanism**  
+   **Base Version (cloudy):**  
+   - Basic job scheduling with a simple queue management system.  
+   - Limited handling of job dependencies and priorities.  
+   - May not support advanced scheduling strategies.  
+   **New Version (CloudyGUI):**  
+   - Advanced job scheduling using a priority queue.  
+   - Comprehensive dependency management, allowing jobs to specify dependencies and ensuring they are met before scheduling.  
+   - Implementation of job preemption, enabling higher-priority jobs to interrupt lower-priority ones for resource allocation.  
 
-2. **Preemption Logic**:
-   - Implements priority-based preemption, allowing higher priority jobs to interrupt lower priority ones.
-   - Includes a grace period before preemption, mimicking real cloud behavior.
+2. **Resource Management**  
+   **Base Version (cloudy):**  
+   - Basic resource allocation checks before scheduling jobs.  
+   - Limited dynamic resource management capabilities.  
+   **New Version (CloudyGUI):**  
+   - Enhanced resource management with detailed checks against resource quotas.  
+   - Dynamic resource allocation based on job requirements and current availability.  
+   - Ability to preempt running jobs to free up resources for higher-priority tasks.  
 
-3. **Resource Management**:
-   - Enforces resource quotas to prevent overallocation, similar to limits set by cloud providers.
-   - Tracks resource usage dynamically.
+3. **Logging and Monitoring**  
+   **Base Version (cloudy):**  
+   - Minimal logging capabilities, primarily focused on basic job execution.  
+   **New Version (CloudyGUI):**  
+   - Comprehensive logging of job status changes, errors, and system events for better traceability and debugging.  
+   - Enhanced monitoring features to track job progress and resource usage.  
 
-4. **Job States**:
-   - Manages various job states that reflect real cloud job lifecycles.
-   - Allows for transitions between states based on job progress and resource availability.
+4. **Error Handling**  
+   **Base Version (cloudy):**  
+   - Basic error handling, primarily focused on job execution.  
+   **New Version (CloudyGUI):**  
+   - Robust error handling mechanisms that include specific exceptions for scheduling and resource allocation issues.  
+   - Detailed error logging to facilitate troubleshooting and improve system reliability.  
 
-5. **Failure Patterns**:
-   - Introduces realistic failure rates, reflecting the unpredictability of cloud environments.
-   - Handles job interruptions and failures gracefully.
+5. **User Interface and Usability**  
+   **Base Version (cloudy):**  
+   - Primarily backend-focused with limited user interaction capabilities.  
+   **New Version (CloudyGUI):**  
+   - **Django and GUI-Based Interface**: Implementation of a Django web framework provides a modern and intuitive graphical user interface, enhancing user interaction with the scheduling system.  
+   - Improved usability features that allow for easier management of jobs and resources through a web interface.  
 
-6. **Cost Considerations**:
-   - Incorporates cost calculations based on resource usage, job progress, and instance type.
+6. **Integration of Advanced Features**  
+   **Base Version (cloudy):**  
+   - Lacks integration of advanced cloud features such as dynamic scaling, sophisticated scheduling algorithms, and real-time resource monitoring.  
+   **New Version (CloudyGUI):**  
+   - Incorporates features that are more aligned with real cloud systems, such as dynamic scaling, enhanced scheduling algorithms, and real-time monitoring of job execution and resource usage.
 
-7. **Checkpointing**:
-   - Implements checkpointing for spot instances, allowing the system to save the state of jobs.
-
-8. **Dynamic Scheduling**:
-   - Continuously evaluates the job queue and updates job statuses based on resource availability.
-
-9. **Job Progress Tracking**:
-   - Monitors job progress and uses it to inform preemption decisions.
-
-## Time Window Management
+### Time Window Management
 
 The workload generator uses a sophisticated 7-day time window system for job distribution and resource tracking:
 
-### Time Window Configuration
+#### Time Window Configuration
 - **Window Size**: 7 days (configurable)
 - **Base Time**: Current time minus 7 days
 - **Resolution**: 5-minute intervals for resource tracking
 
-### Job Timing Distribution
+#### Job Timing Distribution
 1. **Submit Time**
    - Distributed across the 7-day window
    - Random distribution with weighted recent hours
@@ -91,7 +97,7 @@ The workload generator uses a sophisticated 7-day time window system for job dis
    - Running jobs: Calculated based on task type
    - Interrupted jobs: Random duration up to max
 
-### Status-based Timing
+#### Status-based Timing
 - **Waiting Jobs (20%)**
   - No start/end time set
   - Resources reserved but not allocated
@@ -113,10 +119,10 @@ The workload generator uses a sophisticated 7-day time window system for job dis
   - Random duration up to maximum
   - Partial resource usage history
 
-## Predefined Resources
+### Predefined Resources
 The workload generator simulates a high-performance computing environment with the following virtual machine specifications:
 
-### Virtual Machine Configurations
+#### Virtual Machine Configurations
 - **VM 1**: 512 cores, 2TB RAM, 32 GPUs
 - **VM 2**: 256 cores, 1TB RAM, 16 GPUs
 - **VM 3**: 1024 cores, 4TB RAM, 64 GPUs
@@ -129,7 +135,7 @@ The system supports various job profiles, each specifying the resource requireme
 - **Data_Science**: 256 CPU, 1024MB RAM, 2 GPUs
 - **Web_Development**: 32 CPU, 128MB RAM, 0 GPU
 
-## Container Management
+### Container Management
 Instances are managed within containers running on allocated virtual machines. Each instance is assigned to a container, which is created and started when the instance is initialized. This allows for better resource management and isolation of workloads.
 
 ### Container Lifecycle Management
@@ -138,11 +144,11 @@ Instances are managed within containers running on allocated virtual machines. E
 
 This architecture allows for efficient utilization of resources while maintaining flexibility in workload management.
 
-## VM Resources
+#### VM Resources
 
 The workload generator simulates a high-performance computing environment with the following resources:
 
-### Virtual Machine Specifications
+#### Virtual Machine Specifications
 - **CPU**: 512 cores
   - Supports parallel processing
   - Dynamic allocation based on job requirements
