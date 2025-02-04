@@ -185,27 +185,37 @@ This structure helps in organizing the project logically, making it easier to na
 
 ## Installation
 
+### Installation
+
 1. Clone this repository:
-```bash
-git clone https://github.com/iamohitkaushik1/CloudyGUI.git
-cd CloudyGUI
-```
+   ```bash
+   git clone https://github.com/iamohitkaushik1/CloudyGUI.git
+   ```
 
-2. Create a virtual environment and activate it:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+2. Navigate into the cloned directory:
+   ```bash
+   cd CloudyGUI
+   ```
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+3. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   ```
 
-4. Run migrations:
-```bash
-python manage.py migrate
-```
+4. Activate the virtual environment:
+   ```bash
+   venv\Scripts\activate
+   ```
+   For Windows, or:
+   ```bash
+   source venv/bin/activate
+   ```
+   For Unix/Linux/MacOS.
+
+5. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ## Running the Django Server
 
