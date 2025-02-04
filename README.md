@@ -4,45 +4,7 @@ A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy
 
 ---
 
-## What's New in This Version
-- **Advanced Job Scheduling**: 
-  - Implemented a sophisticated job scheduling mechanism using a priority queue.
-  - Comprehensive dependency management, allowing jobs to specify dependencies and ensuring they are met before scheduling.
-  - Implementation of job preemption, enabling higher-priority jobs to interrupt lower-priority ones for resource allocation.
-
-- **Enhanced Resource Management**: 
-  - Detailed checks against resource quotas to optimize resource allocation.
-  - Dynamic resource allocation based on job requirements and current availability.
-  - Ability to preempt running jobs to free up resources for higher-priority tasks.
-
-- **Comprehensive Logging and Monitoring**: 
-  - Extensive logging of job status changes, errors, and system events for improved traceability.
-  - Enhanced monitoring features to track job progress and resource usage.
-
-- **Robust Error Handling**: 
-  - Improved error handling mechanisms with specific exceptions for scheduling and resource allocation issues.
-  - Detailed error logging to facilitate troubleshooting.
-
-- **User Interface and Usability**: 
-  - **Django and GUI-Based Interface**: Implementation of a Django web framework provides a modern and intuitive graphical user interface, enhancing user interaction with the scheduling system.
-  - Improved usability features for easier management of jobs and resources through a web interface.
-
-- **Integration of Advanced Features**: 
-  - Incorporates features that are more aligned with real cloud systems, such as dynamic scaling, enhanced scheduling algorithms, and real-time monitoring of job execution and resource usage.
-
----
-
-## Features
-- **Hierarchical Structure**: Jobs → Tasks → Instances hierarchy for complex workload modeling
-- **Priority Scheduling**: Jobs are scheduled based on priority levels and resource availability
-- **Resource Management**: Efficient allocation of CPU, Memory, and GPU resources
-- **Dependency Handling**: Support for job dependencies with cycle detection
-- **Status Tracking**: Comprehensive tracking of job states (pending, running, terminated, interrupted)
-- **Failure Simulation**: Random interruption simulation for realistic workload testing
-- **Output Analysis**: CSV output generation for detailed workload analysis
-
-# What's New in This Version
-
+## What's New in This Version1. 
 1. **Job Scheduling Mechanism**  
    **Base Version (cloudy):**  
    - Basic job scheduling with a simple queue management system.  
@@ -88,6 +50,17 @@ A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy
    - Lacks integration of advanced cloud features such as dynamic scaling, sophisticated scheduling algorithms, and real-time resource monitoring.  
    **New Version (CloudyGUI):**  
    - Incorporates features that are more aligned with real cloud systems, such as dynamic scaling, enhanced scheduling algorithms, and real-time monitoring of job execution and resource usage.
+
+---
+
+## Features
+- **Hierarchical Structure**: Jobs → Tasks → Instances hierarchy for complex workload modeling
+- **Priority Scheduling**: Jobs are scheduled based on priority levels and resource availability
+- **Resource Management**: Efficient allocation of CPU, Memory, and GPU resources
+- **Dependency Handling**: Support for job dependencies with cycle detection
+- **Status Tracking**: Comprehensive tracking of job states (pending, running, terminated, interrupted)
+- **Failure Simulation**: Random interruption simulation for realistic workload testing
+- **Output Analysis**: CSV output generation for detailed workload analysis
 
 ### Time Window Management
 
