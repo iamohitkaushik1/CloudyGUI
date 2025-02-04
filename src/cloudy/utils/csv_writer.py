@@ -1,5 +1,6 @@
 import csv
 import os
+from datetime import datetime
 
 def save_to_csv(jobs, scheduler, filename='workload_output.csv'):
     with open(filename, 'w', newline='') as csvfile:
@@ -30,7 +31,7 @@ def save_to_csv(jobs, scheduler, filename='workload_output.csv'):
 
 def write_workload_to_csv(workload, output_file):
     """
-    Write workload data to a CSV file.
+    Write workload data to a CSV file with enhanced information.
     
     Args:
         workload (list): List of Job objects
@@ -38,51 +39,54 @@ def write_workload_to_csv(workload, output_file):
     """
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     
+    current_time = datetime.now()
+    
     with open(output_file, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow([
-            'Job ID', 
-            'Job Type', 
+            'Job ID',
+            'Job Type',
+            'Task ID',
+            'Task Type',
             'Priority',
-            'Job Status',
             'Dependencies',
-            'Job Start Time',
-            'Job End Time',
-            'Task ID', 
-            'Task Status',
-            'Task Start Time',
-            'Task End Time',
             'Instance ID', 
             'Instance Status',
             'Instance Start Time',
             'Instance End Time',
-            'CPU', 
-            'Memory (MB)', 
-            'GPU',
-            'Disk (GB)'
+            'CPU Required',
+            'CPU Usage',
+            'Memory Required (MB)',
+            'Memory Usage (MB)',
+            'GPU Required',
+            'GPU Usage',
+            'Disk Required (GB)',
+            'Disk Usage (GB)'
         ])
         
         for job in workload:
+            # Update resource usage for all instances
             for task in job.tasks:
                 for instance in task.instances:
+                    instance.update_usage(current_time)
+                    
                     writer.writerow([
                         job.job_id,
                         job.job_type,
-                        job.priority,
-                        job.status,
-                        ','.join(job.dependencies) if job.dependencies else '',
-                        job.start_time.strftime('%Y-%m-%d %H:%M:%S') if job.start_time else '',
-                        job.end_time.strftime('%Y-%m-%d %H:%M:%S') if job.end_time else '',
                         task.task_id,
-                        task.status,
-                        task.start_time.strftime('%Y-%m-%d %H:%M:%S') if task.start_time else '',
-                        task.end_time.strftime('%Y-%m-%d %H:%M:%S') if task.end_time else '',
+                        task.task_type,
+                        job.priority,
+                        ','.join(job.dependencies) if job.dependencies else '',
                         instance.instance_id,
                         instance.status,
-                        instance.start_time.strftime('%Y-%m-%d %H:%M:%S') if instance.start_time else '',
-                        instance.end_time.strftime('%Y-%m-%d %H:%M:%S') if instance.end_time else '',
-                        round(instance.cpu_required, 2),
-                        round(instance.memory_required, 2),
-                        round(instance.gpu_required, 2),
-                        round(instance.disk_required, 2)
+                        instance.start_time.strftime('%Y-%m-%d %H:%M:%S') if instance.start_time else 'Not Started',
+                        instance.end_time.strftime('%Y-%m-%d %H:%M:%S') if instance.end_time else 'Not Finished',
+                        f"{instance.cpu_required:.2f}",
+                        f"{instance.current_usage['cpu']:.2f}",
+                        f"{instance.memory_required:.2f}",
+                        f"{instance.current_usage['memory']:.2f}",
+                        f"{instance.gpu_required:.2f}",
+                        f"{instance.current_usage['gpu']:.2f}",
+                        f"{instance.disk_required:.2f}",
+                        f"{instance.current_usage['disk']:.2f}"
                     ])

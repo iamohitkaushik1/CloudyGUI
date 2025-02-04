@@ -105,13 +105,20 @@
         </div>
     </div>
 
-    <div class="row mb-4">
-        <!-- Charts -->
+    <div class="row mt-4">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Resource Distribution</h5>
                     <canvas id="resourceChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Instance Status Distribution</h5>
+                    <canvas id="instanceStatusChart"></canvas>
                 </div>
             </div>
         </div>
@@ -215,24 +222,41 @@
     const jobTypeCtx = document.getElementById('jobTypeChart').getContext('2d');
     const jobTypeData = {{ job_type_json|safe }};
     new Chart(jobTypeCtx, {
-        type: 'pie',
+        type: 'bar',
         data: {
             labels: jobTypeData.labels,
             datasets: [{
+                label: 'Number of Jobs',
                 data: jobTypeData.values,
                 backgroundColor: [
-                    '#2ecc71',
-                    '#3498db',
-                    '#9b59b6',
-                    '#e74c3c'
-                ]
+                    '#2ecc71',  // Job Type 1 - Green
+                    '#3498db',  // Job Type 2 - Blue
+                    '#9b59b6',  // Job Type 3 - Purple
+                    '#e74c3c'   // Job Type 4 - Red
+                ],
+                borderWidth: 1
             }]
         },
         options: {
             responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Jobs'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Job Types'
+                    }
+                }
+            },
             plugins: {
                 legend: {
-                    position: 'bottom'
+                    display: false
                 }
             }
         }
@@ -263,6 +287,51 @@
             scales: {
                 y: {
                     beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Instance Status Distribution Chart
+    const instanceStatusCtx = document.getElementById('instanceStatusChart').getContext('2d');
+    const instanceStatusData = {{ instance_status_json|safe }};
+    new Chart(instanceStatusCtx, {
+        type: 'bar',
+        data: {
+            labels: instanceStatusData.labels,
+            datasets: [{
+                label: 'Number of Instances',
+                data: instanceStatusData.values,
+                backgroundColor: [
+                    '#2ecc71',  // Running - Green
+                    '#f1c40f',  // Waiting - Yellow
+                    '#e74c3c',  // Failed - Red
+                    '#3498db',  // Terminated - Blue
+                    '#9b59b6'   // Interrupted - Purple
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Instances'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Instance Status'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
                 }
             }
         }
