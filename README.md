@@ -80,6 +80,31 @@ The workload generator uses a sophisticated 7-day time window system for job dis
   - Random duration up to maximum
   - Partial resource usage history
 
+## Predefined Resources
+The workload generator simulates a high-performance computing environment with the following virtual machine specifications:
+
+### Virtual Machine Configurations
+- **VM 1**: 512 cores, 2TB RAM, 32 GPUs
+- **VM 2**: 256 cores, 1TB RAM, 16 GPUs
+- **VM 3**: 1024 cores, 4TB RAM, 64 GPUs
+- **VM 4**: 128 cores, 512GB RAM, 8 GPUs
+
+### Job Profiles
+The system supports various job profiles, each specifying the resource requirements:
+- **ML_Workload**: 128 CPU, 512MB RAM, 1 GPU
+- **Batch_Job**: 64 CPU, 256MB RAM, 0 GPU
+- **Data_Science**: 256 CPU, 1024MB RAM, 2 GPUs
+- **Web_Development**: 32 CPU, 128MB RAM, 0 GPU
+
+## Container Management
+Instances are managed within containers running on allocated virtual machines. Each instance is assigned to a container, which is created and started when the instance is initialized. This allows for better resource management and isolation of workloads.
+
+### Container Lifecycle Management
+- **Start**: Containers are started when instances are created.
+- **Stop**: Containers can be stopped when instances are completed or terminated.
+
+This architecture allows for efficient utilization of resources while maintaining flexibility in workload management.
+
 ## VM Resources
 
 The workload generator simulates a high-performance computing environment with the following resources:

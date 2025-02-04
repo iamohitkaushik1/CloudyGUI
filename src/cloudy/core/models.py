@@ -103,3 +103,65 @@ class Job:
             total_gpu += resources['gpu']
             total_disk += resources['disk']
         return {'cpu': total_cpu, 'memory': total_memory, 'gpu': total_gpu, 'disk': total_disk}
+
+class Container:
+    def __init__(self, container_id: str, vm: 'VM'):
+        self.container_id = container_id
+        self.vm = vm
+        self.instances = []  # List of instances running in this container
+        self.status = "stopped"  # Status of the container (running, stopped)
+
+    def add_instance(self, instance: 'Instance'):
+        self.instances.append(instance)
+
+    def start(self):
+        self.status = "running"
+        # Logic to start the container
+        print(f"Container {self.container_id} started on VM {self.vm.vm_id}")
+
+    def stop(self):
+        self.status = "stopped"
+        # Logic to stop the container
+        print(f"Container {self.container_id} stopped on VM {self.vm.vm_id}")
+
+class VM:
+    def __init__(self, vm_id: str, cpu: int, memory: int, gpu: int):
+        self.vm_id = vm_id
+        self.cpu = cpu
+        self.memory = memory
+        self.gpu = gpu
+        self.instances = []  # List of instances running in this VM
+        self.containers = []  # List of containers running in this VM
+
+    def add_instance(self, instance: 'Instance'):
+        self.instances.append(instance)
+
+    def create_container(self):
+        container_id = f"container_{uuid.uuid4().hex[:8]}"
+        container = Container(container_id, self)
+        self.containers.append(container)
+        container.start()  # Start the container upon creation
+        return container
+
+class JobProfile:
+    def __init__(self, profile_name: str, cpu_required: int, memory_required: int, gpu_required: int):
+        self.profile_name = profile_name
+        self.cpu_required = cpu_required
+        self.memory_required = memory_required
+        self.gpu_required = gpu_required
+
+# Predefined resources for VMs
+predefined_vms = [
+    VM("vm1", 512, 2048, 32),  # Example VM with 512 cores, 2TB RAM, 32 GPUs
+    VM("vm2", 256, 1024, 16),   # Another VM configuration
+    VM("vm3", 1024, 4096, 64),  # New VM configuration
+    VM("vm4", 128, 512, 8)      # New VM configuration
+]
+
+# Example job profiles
+job_profiles = [
+    JobProfile("ML_Workload", 128, 512, 1),  # ML job profile
+    JobProfile("Batch_Job", 64, 256, 0),      # Batch processing job profile
+    JobProfile("Data_Science", 256, 1024, 2), # New job profile
+    JobProfile("Web_Development", 32, 128, 0) # New job profile
+]

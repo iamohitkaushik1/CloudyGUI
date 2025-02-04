@@ -92,6 +92,52 @@ The workload generator uses a 7-day time window for job distribution:
 - Submit times, start times, and end times are calculated based on job status
 - Resource usage patterns vary over time based on job progress
 
+## Project Structure
+
+The project structure has been organized for better clarity and maintainability:
+
+```
+cloudy/
+│
+├── core/
+│   ├── models.py         # Contains core data models for Job, Task, and Instance
+│   └── ...               # Other core functionalities
+│
+├── utils/
+│   ├── workload_generator.py  # Logic for generating workloads
+│   └── ...               # Other utility functions
+│
+├── views/
+│   ├── workload_manager.py  # Handles workload generation requests
+│   └── ...               # Other view-related functionalities
+│
+└── README.md            # Project documentation
+```
+
+## Time Window Management
+
+The workload generator now includes advanced time window management:
+- Each job has a staggered start time, allowing for better simulation of real-world workloads.
+- Tasks within jobs also have their start times calculated relative to their parent job's start time.
+- Instances are generated with start and end times that reflect their respective task's time window, ensuring accurate tracking of resource usage.
+
+## Scaled VM Resources
+
+The workload generator supports scaled VM resources based on job types:
+- **Machine Learning Jobs**:
+  - CPU: 20-40 cores
+  - Memory: 4000-8000 MB
+  - GPU: 1-2 units
+  - Disk: 50-200 GB
+
+- **Other Job Types** (e.g., Batch Processing, Data Analytics):
+  - CPU: 10-30 cores
+  - Memory: 2000-6000 MB
+  - GPU: 0 units
+  - Disk: 20-100 GB
+
+This scaling allows for realistic simulations of resource usage patterns across different job types.
+
 ## Directory Structure
 
 ```

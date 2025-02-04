@@ -111,6 +111,30 @@ def generate_workload_view(request):
                 for resource in total_resources:
                     total_resources[resource] += resources[resource]
             
+            # Track instance status distribution
+            instance_status_counts = {
+                'running': 0,
+                'waiting': 0,
+                'failed': 0,
+                'terminated': 0,
+                'interrupted': 0
+            }
+            
+            for job in workload:
+                for task in job.tasks:
+                    for instance in task.instances:
+                        status = instance.status.lower()
+                        if status in instance_status_counts:
+                            instance_status_counts[status] += 1
+                        elif status == 'interrupted':
+                            instance_status_counts['interrupted'] += 1
+
+            # Prepare instance status data for the chart
+            instance_status_data = {
+                'labels': list(instance_status_counts.keys()),
+                'values': list(instance_status_counts.values())
+            }
+
             # Prepare job type distribution data
             job_type_data = {
                 'labels': list(job_types.keys()),
@@ -134,12 +158,18 @@ def generate_workload_view(request):
                 'output_file': 'workload_output.csv'
             }
 
+            # Convert data to JSON for template
+            timeline_json = json.dumps(timeline_data)
+            job_type_json = json.dumps(job_type_data)
+            instance_status_json = json.dumps(instance_status_data)
+
             return render(request, 'workload_manager/generate.html', {
                 'form': form,
                 'stats': stats,
-                'job_type_json': json.dumps(job_type_data),
+                'job_type_json': job_type_json,
                 'job_status_json': json.dumps(job_status_data),
-                'timeline_json': json.dumps(timeline_data)
+                'instance_status_json': instance_status_json,
+                'timeline_json': timeline_json
             })
     else:
         form = WorkloadConfigForm()
