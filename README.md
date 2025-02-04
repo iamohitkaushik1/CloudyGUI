@@ -1,4 +1,4 @@
-# Cloudy GUI - Enhanced Workload Management System
+# CloudyGUI - Enhanced Workload Management System
 
 A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy), developed in collaboration with [Ahmad Siavashi](https://github.com/ahmad-siavashi). This version extends the original [Cloudy Workload Management System](https://github.com/ahmad-siavashi/cloudy) by adding a modern web interface and enhanced visualization capabilities.
 
