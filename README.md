@@ -203,16 +203,16 @@ This structure helps in organizing the project logically, making it easier to na
    ```
 
 4. Activate the virtual environment:
+   For Windows, use
    ```bash
    venv\Scripts\activate
    ```
-   For Windows, or:
+   For Unix/Linux/MacOS use
    ```bash
    source venv/bin/activate
    ```
-   For Unix/Linux/MacOS.
 
-5. Install dependencies:
+6. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
