@@ -6,11 +6,11 @@ A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy
 
 ## What's New in This Version! 
 1. **Job Scheduling Mechanism**  
-   **Base Version (cloudy):**  
+**Base Version (cloudy):**  
    - Basic job scheduling with a simple queue management system.  
    - Limited handling of job dependencies and priorities.  
    - May not support advanced scheduling strategies.  
-   **New Version (CloudyGUI):**  
+**New Version (CloudyGUI):**  
    - Advanced job scheduling using a priority queue.  
    - Comprehensive dependency management, allowing jobs to specify dependencies and ensuring they are met before scheduling.  
    - Implementation of job preemption, enabling higher-priority jobs to interrupt lower-priority ones for resource allocation.  
