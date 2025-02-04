@@ -216,6 +216,10 @@ This structure helps in organizing the project logically, making it easier to na
    ```bash
    pip install -r requirements.txt
    ```
+7. Run Migrations
+   
+   ```bash
+   python manage.py migrate
 
 ## Running the Django Server
 
