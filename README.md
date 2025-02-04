@@ -4,7 +4,7 @@ A collaborative enhancement of [Cloudy](https://github.com/ahmad-siavashi/cloudy
 
 ---
 
-## What's New in This Version1. 
+## What's New in This Version! 
 1. **Job Scheduling Mechanism**  
    **Base Version (cloudy):**  
    - Basic job scheduling with a simple queue management system.  
