@@ -133,7 +133,29 @@ Well, this is just an example, and it isn't true in every case. The job status d
 ---
 
 ## Predefined Resources
-The workload generator simulates a high-performance computing environment with the following virtual machine specifications:
+The workload generator simulates a high-performance computing environment with the following data centre and virtual machine specifications:
+
+### Data Centre Resources 
+The workload generator simulates a high-performance computing environment with the following resources:
+- **CPU**: 512 cores
+  - Supports parallel processing
+  - Dynamic allocation based on job requirements
+  - Configurable core limits per job type
+
+- **Memory**: 2TB RAM
+  - High-bandwidth memory access
+  - Scalable allocation from 4GB to 512GB per job
+  - Memory usage patterns based on job type
+
+- **GPU**: 32 units
+  - Dedicated GPU resources for ML workloads
+  - Fractional GPU allocation supported
+  - GPU sharing between compatible jobs
+
+- **Storage**: 10TB disk space
+  - High-speed SSD storage
+  - Dynamic I/O patterns
+  - Configurable per-job storage limits
 
 ### Virtual Machine Configurations
 - **VM 1**: 512 cores, 2TB RAM, 32 GPUs
@@ -158,28 +180,6 @@ Instances are managed within containers running on allocated virtual machines. E
 - **Stop**: Containers can be stopped when instances are completed or terminated.
 
 This architecture allows for efficient utilization of resources while maintaining flexibility in workload management.
-
-### Data Centre Resources
-The workload generator simulates a high-performance computing environment with the following resources:
-- **CPU**: 512 cores
-  - Supports parallel processing
-  - Dynamic allocation based on job requirements
-  - Configurable core limits per job type
-
-- **Memory**: 2TB RAM
-  - High-bandwidth memory access
-  - Scalable allocation from 4GB to 512GB per job
-  - Memory usage patterns based on job type
-
-- **GPU**: 32 units
-  - Dedicated GPU resources for ML workloads
-  - Fractional GPU allocation supported
-  - GPU sharing between compatible jobs
-
-- **Storage**: 10TB disk space
-  - High-speed SSD storage
-  - Dynamic I/O patterns
-  - Configurable per-job storage limits
 
 ---
 
