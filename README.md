@@ -157,12 +157,6 @@ The workload generator simulates a high-performance computing environment with t
   - Dynamic I/O patterns
   - Configurable per-job storage limits
 
-### Virtual Machine Configurations
-- **VM 1**: 512 cores, 2TB RAM, 32 GPUs
-- **VM 2**: 256 cores, 1TB RAM, 16 GPUs
-- **VM 3**: 1024 cores, 4TB RAM, 64 GPUs
-- **VM 4**: 128 cores, 512GB RAM, 8 GPUs
-
 ### Job Profiles
 The system supports various job profiles, each specifying the resource requirements:
 - **ML_Workload**: 128 CPU, 512MB RAM, 1 GPU
