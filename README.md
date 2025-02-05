@@ -107,6 +107,8 @@ The workload generator uses a sophisticated 7-day time window system for job dis
    - Interrupted jobs: Random duration up to max
 
 ### Status-based Timing
+Well, this is just an example, and it isn't true in every case. The job status distribution depends on the order of execution and available resources.
+
 - **Waiting Jobs (20%)**
   - No start/end time set
   - Resources reserved but not allocated
