@@ -159,7 +159,7 @@ Instances are managed within containers running on allocated virtual machines. E
 
 This architecture allows for efficient utilization of resources while maintaining flexibility in workload management.
 
-### VM Resources
+### Data Centre Resources
 The workload generator simulates a high-performance computing environment with the following resources:
 - **CPU**: 512 cores
   - Supports parallel processing
