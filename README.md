@@ -133,7 +133,6 @@ Well, this is just an example, and it isn't true in every case. The job status d
 ---
 
 ## Predefined Resources
-The workload generator simulates a high-performance computing environment with the following data centre and virtual machine specifications:
 
 ### Data Centre Resources 
 The workload generator simulates a high-performance computing environment with the following resources:
