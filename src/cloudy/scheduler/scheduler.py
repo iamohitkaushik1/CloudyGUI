@@ -32,6 +32,11 @@ class Scheduler:
         self.status_history = []
         self.all_jobs = []
         
+        # Job aging settings
+        self.aging_interval = timedelta(minutes=5)  # Time interval for aging
+        self.aging_factor = 0.1  # Priority boost factor per aging interval
+        self.job_wait_times = {}  # Track job waiting times
+        
         # Simplified cloud-like behavior settings
         self.preemption_grace_period = timedelta(minutes=2)  # Standard cloud preemption notice
         self.spot_instance_probability = 0.6  # 60% chance of spot instances
@@ -64,9 +69,15 @@ class Scheduler:
             # Store job in all_jobs list
             self.all_jobs.append(job)
             
+            # Initialize job wait time
+            self.job_wait_times[job.job_id] = {
+                'start_wait': datetime.now(),
+                'effective_priority': job.priority
+            }
+            
             # Add to priority queue if no dependencies or all dependencies are met
             if self._can_start(job):
-                self.job_queue.put((job.priority, job))
+                self.job_queue.put((self.job_wait_times[job.job_id]['effective_priority'], job))
             
             logger.info(f"Added job {job.job_id} to scheduler")
         except Exception as e:
@@ -113,6 +124,9 @@ class Scheduler:
         skipped_jobs = []
         
         try:
+            # Apply aging to waiting jobs
+            self._apply_aging(current_time)
+            
             while not self.job_queue.empty():
                 priority, job = self.job_queue.get()
                 
@@ -431,3 +445,37 @@ class Scheduler:
         except Exception as e:
             logger.error(f"Error getting status summary: {str(e)}")
             return {status: 0 for status in ['waiting', 'running', 'terminated', 'interrupted', 'failed']}
+
+    def _apply_aging(self, current_time):
+        """Apply aging to waiting jobs to prevent starvation."""
+        try:
+            # Get all jobs from the queue
+            temp_queue = PriorityQueue()
+            aged_jobs = []
+            
+            while not self.job_queue.empty():
+                priority, job = self.job_queue.get()
+                wait_info = self.job_wait_times.get(job.job_id)
+                
+                if wait_info:
+                    # Calculate waiting time
+                    wait_duration = current_time - wait_info['start_wait']
+                    aging_periods = wait_duration / self.aging_interval
+                    
+                    # Apply aging factor based on waiting time
+                    aged_priority = max(1, wait_info['effective_priority'] - (aging_periods * self.aging_factor))
+                    wait_info['effective_priority'] = aged_priority
+                    
+                    aged_jobs.append((aged_priority, job))
+                    logger.debug(f"Job {job.job_id} aged priority: {aged_priority} (original: {job.priority})")
+            
+            # Put all jobs back in the queue with their aged priorities
+            for priority, job in aged_jobs:
+                temp_queue.put((priority, job))
+            
+            # Update the job queue
+            self.job_queue = temp_queue
+            
+        except Exception as e:
+            logger.error(f"Error applying aging to jobs: {str(e)}")
+            raise

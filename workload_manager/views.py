@@ -102,12 +102,12 @@ def generate_workload_view(request):
                     # Track job status at current time
                     if job.start_time and job.start_time <= current:
                         if not job.end_time or current <= job.end_time:
-                            if job.status == 'failed':
+                            if job.status == 'running':
+                                resources_at_time['active_jobs'] += 1
+                            elif job.status == 'failed':
                                 resources_at_time['failed_jobs'] += 1
                             elif job.status == 'waiting':
                                 resources_at_time['waiting_jobs'] += 1
-                            elif job.status == 'running':
-                                resources_at_time['active_jobs'] += 1
                             elif job.status == 'terminated':
                                 resources_at_time['terminated_jobs'] += 1
                             elif job.status == 'interrupted':

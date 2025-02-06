@@ -50,6 +50,7 @@ def write_workload_to_csv(workload, output_file):
             'Task Type',
             'Priority',
             'Dependencies',
+            'Dependency Types',  
             'Instance ID', 
             'Instance Status',
             'Instance Start Time',
@@ -64,8 +65,15 @@ def write_workload_to_csv(workload, output_file):
             'Disk Usage (GB)'
         ])
         
+        job_lookup = {job.job_id: job for job in workload}
+        
         for job in workload:
-            # Update resource usage for all instances
+            dep_ids = job.dependencies if job.dependencies else []
+            dep_types = [job_lookup[dep_id].job_type for dep_id in dep_ids] if dep_ids else []
+            
+            formatted_deps = ','.join(dep_ids) if dep_ids else ''
+            formatted_dep_types = ','.join(dep_types) if dep_types else ''
+            
             for task in job.tasks:
                 for instance in task.instances:
                     instance.update_usage(current_time)
@@ -76,7 +84,8 @@ def write_workload_to_csv(workload, output_file):
                         task.task_id,
                         task.task_type,
                         job.priority,
-                        ','.join(job.dependencies) if job.dependencies else '',
+                        formatted_deps,
+                        formatted_dep_types,  
                         instance.instance_id,
                         instance.status,
                         instance.start_time.strftime('%Y-%m-%d %H:%M:%S') if instance.start_time else 'Not Started',
